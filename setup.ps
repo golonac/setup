@@ -1,10 +1,3 @@
-$nasuser = Read-Host -Prompt "NAS username"
-$naspwd = Read-Host -Prompt "NAS password"
-
-net use Y: \\192.168.1.113\Media $naspwd /USER:$nasuser
-net use Z: \\192.168.1.113\Photos $naspwd /USER:$nasuser
-
-Install-WindowsUpdate -acceptEula -getUpdatesFromMS
 Set-BoxstarterTaskbarOptions -DisableSearchBox
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowProtectedOSFiles -EnableShowFileExtensions -EnableShowFullPathInTitleBar -EnableOpenFileExplorerToQuickAccess -EnableShowRecentFilesInQuickAccess -EnableShowFrequentFoldersInQuickAccess -EnableExpandToOpenFolder -EnableShowRibbon -EnableItemCheckBox
 Disable-InternetExplorerESC
@@ -28,6 +21,8 @@ choco install python
 choco install python3
 choco install python311
 choco install terraform
+choco install forticlientvpn
+choco install azure-cosmosdb-emulator
 #choco install vcredist140
 #choco install vcredist2015
 #choco install visualstudio2017buildtools
@@ -37,5 +32,11 @@ choco install terraform
 npm install -g typescript
 npm install -g @angular-cli
 
-Install-ChocolateyPinnedTaskBarItem "$(${env:ProgramFiles(x86)})\Google\Chrome\Application\chrome.exe"
 Install-WindowsUpdate -acceptEula -getUpdatesFromMS
+
+Install-ChocolateyPinnedTaskBarItem "$(${env:ProgramFiles(x86)})\Google\Chrome\Application\chrome.exe"
+
+$nasuser = Read-Host -Prompt "NAS username"
+$naspwd = Read-Host -Prompt "NAS password"
+net use Y: \\192.168.1.113\Media $naspwd /USER:$nasuser
+net use Z: \\192.168.1.113\Photos $naspwd /USER:$nasuser
