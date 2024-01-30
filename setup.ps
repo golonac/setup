@@ -1,5 +1,7 @@
 # Open with browser (IE or Edge): https://boxstarter.org/package/nr/url?https://raw.githubusercontent.com/golonac/setup/main/setup.ps
 
+Disable-UAC
+Update-ExecutionPolicy Unrestricted
 Format-Volume -DriveLetter E -DevDrive
 
 Set-BoxstarterTaskbarOptions -DisableSearchBox
@@ -36,6 +38,7 @@ choco install mouse-jiggler
 choco install terraform
 choco install forticlientvpn
 choco install azure-cosmosdb-emulator
+choco install keepass
 #choco install vcredist140
 #choco install vcredist2015
 #choco install visualstudio2017buildtools
@@ -53,6 +56,8 @@ Install-ChocolateyPinnedTaskBarItem "$($env:LOCALAPPDATA)\Programs\Microsoft VS 
 Install-ChocolateyPinnedTaskBarItem "$($env:LOCALAPPDATA)\Postman\Postman.exe"
 Install-ChocolateyPinnedTaskBarItem "$($env:LOCALAPPDATA)\slack\slack.exe"
 
+Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name LaunchTo -Type DWord -Value 1 #Open Explorer in This Computer
+
 $nasuser = Read-Host -Prompt "NAS username"
 $naspwd = Read-Host -Prompt "NAS password"
 net use Y: \\192.168.1.113\Media $naspwd /USER:$nasuser
@@ -61,3 +66,5 @@ $gitusername = Read-Host -Prompt "GIT user full name"
 $gituseremail = Read-Host -Prompt "GIT user email"
 git config --global user.name "$gitusername"
 git config --global user.email "$gituseremail"
+
+Enable-UAC
