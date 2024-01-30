@@ -2,7 +2,6 @@
 
 # Windows settings
 Disable-UAC
-Update-ExecutionPolicy Unrestricted
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 Format-Volume -DriveLetter E -DevDrive
 Set-BoxstarterTaskbarOptions -DisableSearchBox
@@ -23,8 +22,8 @@ New-Item -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows' -Name 'Windows Search
 New-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search' -Name AllowCortana -Type DWORD -Value 0
 # Developer mode
 Set-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\AppModelUnlock -Name AllowDevelopmentWithoutDevLicense -Value 1
-# Hide search from taskbar
-Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Search -Name SearchboxTaskbarMode -Value 0
+# Disable News from taskbar
+Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "TaskbarDu" -Type DWord -Value 0
 # Hide Cortana from taskbar
 Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name ShowCortanaButton -Value 0
 # Hide TaskView from taskbar
@@ -87,11 +86,15 @@ Install-Module -Name Azure -Scope AllUsers -AllowClobber
 # Core
 choco install powershell-core
 choco install nodejs
-choco install poshgit
 choco install git
 choco install gsudo
 choco install python
 choco install python3
+choco install poshgit
+choco install oh-my-posh
+refreshenv
+oh-my-posh font install CascadiaCode --user
+oh-my-posh init pwsh | Invoke-Expression
 
 # IDE
 choco install vscode
@@ -128,8 +131,34 @@ refreshenv
 npm install -g typescript
 npm install -g @angular/cli
 
+# Config files from OneDrive
+$vscodePath = Join-Path "$env:APPDATA" "Code/User"
+$vscodeRoamingPath = Join-Path "$env:OneDriveConsumer" "Setup/VSCode"
+$roamingItems = @{
+  (Join-Path $vscodePath "settings.json") = (Join-Path $vscodeRoamingPath "settings.json")
+  (Join-Path $vscodePath "keyBindings.json") = (Join-Path $vscodeRoamingPath "keyBindings.json")
+  (Join-Path $vscodePath "snippets/") = (Join-Path $vscodeRoamingPath "snippets/")
+  (Join-Path $env:LOCALAPPDATA "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json") = (Join-Path "$env:OneDriveConsumer" "Setup/Terminal/settings.json")
+}
+foreach($localItemPath in $roamingItems.Keys) {
+  if (Test-Path $localItemPath) {
+    $existingItem = Get-Item $localItemPath
+    if ($existingItem.LinkType -eq "SymbolicLink") {
+      Write-Host "Local item '$localItemPath' already redirected to '$($existingItem.Target)'"
+    }
+    else {
+      Write-Warning "Local item '$localItemPath' already exists.  Not linking to OneDrive"
+    }
+  }
+  else {
+    $roamingItemPath = $roamingItems[$localItemPath]
+    New-Item -ItemType SymbolicLink -Path $localItemPath -Target $roamingItemPath -Whatif 
+  }
+}
+#Add-PoshGitToProfile -AllHosts
+
 # Windows Updates
-Install-WindowsUpdate -acceptEula -getUpdatesFromMS
+Install-WindowsUpdate
 
 # Taskbar
 Install-ChocolateyPinnedTaskBarItem "$(${env:ProgramFiles(x86)})\Google\Chrome\Application\chrome.exe"
