@@ -3,7 +3,8 @@
 # Windows settings
 Disable-UAC
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-Format-Volume -DriveLetter E -DevDrive
+Set-WinSystemLocale fi-FI
+#Format-Volume -DriveLetter E -DevDrive
 Set-BoxstarterTaskbarOptions -DisableSearchBox
 Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowProtectedOSFiles -EnableShowFileExtensions -EnableShowFullPathInTitleBar -EnableOpenFileExplorerToQuickAccess -EnableShowRecentFilesInQuickAccess -EnableShowFrequentFoldersInQuickAccess -EnableExpandToOpenFolder -EnableShowRibbon -EnableItemCheckBox
 Disable-InternetExplorerESC
@@ -28,6 +29,10 @@ Set-ItemProperty -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\AppModelU
 #Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name ShowCortanaButton -Value 0
 # Hide TaskView from taskbar
 #Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name ShowTaskViewButton -Value 0
+# Classic start menu
+Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name Start_ShowClassicMode -Value 1
+# Hide Chat from taskbar
+Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name TaskbarMn -Value 0
 # Hide Widgets from taskbar
 Set-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name TaskbarDa -Value 0
 # Left align taskbar
@@ -163,7 +168,7 @@ foreach ($localItemPath in $roamingItems.Keys) {
 #Add-PoshGitToProfile -AllHosts
 
 # Windows Updates
-Install-WindowsUpdate
+#Install-WindowsUpdate
 
 # Taskbar
 Install-ChocolateyPinnedTaskBarItem "$(${env:ProgramFiles(x86)})\Google\Chrome\Application\chrome.exe"
