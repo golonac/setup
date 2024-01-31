@@ -173,6 +173,7 @@ Install-ChocolateyPinnedTaskBarItem "$($env:LOCALAPPDATA)\Postman\Postman.exe"
 Install-ChocolateyPinnedTaskBarItem "$($env:LOCALAPPDATA)\slack\slack.exe"
 
 # NAS, GIT config
+[console]::beep(600,1000)
 $nasuser = Read-Host -Prompt "NAS username"
 $naspwd = Read-Host -Prompt "NAS password"
 net use Y: \\192.168.1.113\Media $naspwd /USER:$nasuser
