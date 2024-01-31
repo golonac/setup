@@ -1,7 +1,9 @@
-# Open with browser (IE or Edge): https://boxstarter.org/package/nr/url?https://raw.githubusercontent.com/golonac/setup/main/setup.ps
+# Open with browser (IE or Edge):
+# https://boxstarter.org/package/nr/url?https://raw.githubusercontent.com/golonac/setup/main/setup.ps
 
 # Windows settings
 Disable-UAC
+Set-ExecutionPolicy RemoteSigned
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 Set-WinSystemLocale fi-FI
 #Format-Volume -DriveLetter E -DevDrive
@@ -15,7 +17,7 @@ Disable-BingSearch
 Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name LaunchTo -Type DWord -Value 1
 # Disable advertising ID
 If (-Not (Test-Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo")) {
-	New-Item -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo | Out-Null
+  New-Item -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo | Out-Null
 }
 Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo -Name Enabled -Type DWord -Value 0
 # Disable Cortana
