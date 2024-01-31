@@ -8,6 +8,14 @@ try {
 }
 catch {}
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+# Use DevDrive on D:
+[Environment]::SetEnvironmentVariable('npm_config_cache', 'D:\packages\npm', 'Machine')
+[Environment]::SetEnvironmentVariable('NUGET_PACKAGES', 'D:\packages\nuget', 'Machine')
+[Environment]::SetEnvironmentVariable('VCPKG_DEFAULT_BINARY_CACHE', 'D:\packages\vcpkg', 'Machine')
+[Environment]::SetEnvironmentVariable('PIP_CACHE_DIR', 'D:\packages\pip', 'Machine')
+[Environment]::SetEnvironmentVariable('CARGO_HOME', 'D:\packages\cargo', 'Machine')
+[Environment]::SetEnvironmentVariable('MAVEN_OPTS', '-Dmaven.repo.local=D:\packages\maven %MAVEN_OPTS%', 'Machine')
+fsutil devdrv trust D:
 # Localization
 Set-WinSystemLocale fi-FI
 Set-WinUserLanguageList fi
@@ -81,6 +89,7 @@ choco install forticlientvpn
 choco install azure-cosmosdb-emulator
 choco install keepass
 choco install joplin
+choco install wiztree
 #choco install vcredist140
 #choco install vcredist2015
 #choco install visualstudio2017buildtools
