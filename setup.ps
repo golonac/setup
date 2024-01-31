@@ -3,7 +3,10 @@
 
 # Windows settings
 Disable-UAC
-Set-ExecutionPolicy RemoteSigned
+try {
+  Set-ExecutionPolicy RemoteSigned -Scope LocalMachine
+}
+catch {}
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 Set-WinSystemLocale fi-FI
 #Format-Volume -DriveLetter E -DevDrive
