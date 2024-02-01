@@ -100,10 +100,11 @@ choco install docker-desktop
 choco install docker-compose
 #choco install minikube
 
-# NPM
+# NPM & tools
 refreshenv
 npm install -g typescript
 npm install -g @angular/cli
+dotnet tool install --global Microsoft.Playwright.CLI
 
 # Config files from OneDrive
 $vscodePath = Join-Path "$env:APPDATA" "Code/User"
