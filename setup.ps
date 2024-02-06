@@ -11,10 +11,15 @@ Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 # Use DevDrive on D:
 [Environment]::SetEnvironmentVariable('npm_config_cache', 'D:\packages\npm', 'Machine')
 [Environment]::SetEnvironmentVariable('NUGET_PACKAGES', 'D:\packages\nuget', 'Machine')
+[Environment]::SetEnvironmentVariable('NUGET_HTTP_CACHE_PATH', 'D:\packages\nuget-http-cache', 'Machine')
+[Environment]::SetEnvironmentVariable('NUGET_PLUGINS_CACHE_PATH', 'D:\packages\nuget-plugins-cache', 'Machine')
+[Environment]::SetEnvironmentVariable('NUGET_SCRATCH', 'D:\packages\nuget-scratch', 'Machine')
 [Environment]::SetEnvironmentVariable('VCPKG_DEFAULT_BINARY_CACHE', 'D:\packages\vcpkg', 'Machine')
 [Environment]::SetEnvironmentVariable('PIP_CACHE_DIR', 'D:\packages\pip', 'Machine')
 [Environment]::SetEnvironmentVariable('CARGO_HOME', 'D:\packages\cargo', 'Machine')
 [Environment]::SetEnvironmentVariable('MAVEN_OPTS', '-Dmaven.repo.local=D:\packages\maven %MAVEN_OPTS%', 'Machine')
+[Environment]::SetEnvironmentVariable('GRADLE_USER_HOME', 'D:\packages\gradle', 'Machine')
+
 fsutil devdrv trust D:
 # Localization
 Set-WinSystemLocale fi-FI
@@ -51,9 +56,10 @@ choco install nodejs
 choco install git
 choco install gsudo
 choco install python
-choco install python3
+choco install nuget.commandline
 choco install poshgit
 choco install oh-my-posh
+choco install grep
 refreshenv
 oh-my-posh font install RobotoMono
 # Patch an oh-my-posh theme with a PowerShell compatibility setting
@@ -96,14 +102,15 @@ choco install azure-cosmosdb-emulator
 choco install keepass
 choco install joplin
 choco install wiztree
+choco install docker-desktop
+choco install docker-compose
+choco install czkawka --ignore-checksums
+# Probably not necessary:
 #choco install vcredist140
 #choco install vcredist2015
 #choco install visualstudio2017buildtools
 #choco install visualstudio2019-workload-vctools
 #choco install visualstudio2019buildtools
-choco install docker-desktop
-choco install docker-compose
-choco install czkawka --ignore-checksums
 #choco install minikube
 
 # NPM & tools
