@@ -56,12 +56,17 @@ choco install poshgit
 choco install oh-my-posh
 refreshenv
 oh-my-posh font install RobotoMono
+# Patch an oh-my-posh theme with a PowerShell compatibility setting
+$theme = Get-Content "$env:POSH_THEMES_PATH\cobalt2.omp.json" | ConvertFrom-Json
+$theme | Add-Member -Name patch_pswh_bleed -Value true -MemberType NoteProperty
+Set-Content -Path ("$env:POSH_THEMES_PATH\theme.json") -Value ($theme | ConvertTo-Json -Depth 99)
+# Create a PowerShell (7) and WindowsPowerShell (legacy) profile which enables oh-my-posh on launch
 foreach ($item in "PowerShell", "WindowsPowerShell") {
   $path = Join-Path ([Environment]::GetFolderPath("MyDocuments")) $item
   If (!(Test-Path $path)) {
     New-Item -Path $path -Type Directory -Force
   }
-  Set-Content -Path (Join-Path $path "Microsoft.PowerShell_profile.ps1") -Value 'oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\cobalt2.omp.json" | Invoke-Expression'
+  Set-Content -Path (Join-Path $path "Microsoft.PowerShell_profile.ps1") -Value 'oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\theme.json" | Invoke-Expression'
 }
 
 # IDE
