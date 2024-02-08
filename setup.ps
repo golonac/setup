@@ -73,8 +73,8 @@ foreach ($item in "PowerShell", "WindowsPowerShell") {
   If (!(Test-Path $path)) {
     New-Item -Path $path -Type Directory -Force
   }
-  Set-Content -Path (Join-Path $path "Microsoft.PowerShell_profile.ps1") -Value 'oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\theme.json\nImport-Module -Name Terminal-Icons" | Invoke-Expression'
-  Add-Content -Path (Join-Path $path "Microsoft.PowerShell_profile.ps1") -Value 'Import-Module -Name Terminal-Icons'
+  $profilePath = Join-Path $path "Microsoft.PowerShell_profile.ps1"
+  Copy-Item "$env:OneDriveConsumer\Setup\Terminal\Microsoft.PowerShell_profile.ps1" $profilePath
 }
 
 # IDE
@@ -126,6 +126,7 @@ dotnet tool install --global Microsoft.Playwright.CLI
 $vscodePath = Join-Path "$env:APPDATA" "Code/User"
 $vscodeRoamingPath = Join-Path "$env:OneDriveConsumer" "Setup/VSCode"
 $roamingItems = @{
+  (Join-Path (Get-Item $PROFILE).DirectoryName "FileSystem.ps1xml") = (Join-Path "$env:OneDriveConsumer" "Setup/Terminal/FileSystem.ps1xml")
   (Join-Path $vscodePath "settings.json") = (Join-Path $vscodeRoamingPath "settings.json")
   (Join-Path $vscodePath "keyBindings.json") = (Join-Path $vscodeRoamingPath "keyBindings.json")
   (Join-Path $vscodePath "snippets/") = (Join-Path $vscodeRoamingPath "snippets/")
