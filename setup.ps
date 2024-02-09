@@ -50,6 +50,11 @@ Install-Module -Name AzureRM -Scope AllUsers
 Install-Module -Name Azure -Scope AllUsers -AllowClobber
 Install-Module -Name Terminal-Icons
 
+function Add-To-Path($Path) {
+    $Path = [Environment]::GetEnvironmentVariable("PATH", "Machine") + [IO.Path]::PathSeparator + $Path
+    [Environment]::SetEnvironmentVariable( "Path", $Path, "Machine" )
+}
+
 # Core
 choco install powershell-core
 choco install nodejs
@@ -93,6 +98,7 @@ choco install chromedriver
 # Tools
 choco install 7zip
 choco install winmerge
+Add-To-Path $env:ProgramFiles/Winmerge
 choco install postman
 choco install slack
 choco install discord
@@ -130,7 +136,7 @@ $roamingItems = @{
   (Join-Path $vscodePath "settings.json") = (Join-Path $vscodeRoamingPath "settings.json")
   (Join-Path $vscodePath "keyBindings.json") = (Join-Path $vscodeRoamingPath "keyBindings.json")
   (Join-Path $vscodePath "snippets/") = (Join-Path $vscodeRoamingPath "snippets/")
-  (Join-Path $env:LOCALAPPDATA "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json") = (Join-Path "$env:OneDriveConsumer" "Setup/Terminal/settings.json")
+  (Join-Path $env:LOCALAPPDATA "Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json") = (Join-Path "$env:OneDriveConsumer" "Setup/Terminal/settings.json")
 }
 foreach ($localItemPath in $roamingItems.Keys) {
   if (Test-Path $localItemPath) {
