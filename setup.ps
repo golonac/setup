@@ -49,6 +49,8 @@ Remove-Printer -Name "Fax" -ErrorAction:SilentlyContinue
 Install-Module -Name AzureRM -Scope AllUsers
 Install-Module -Name Azure -Scope AllUsers -AllowClobber
 Install-Module -Name Terminal-Icons
+# ChatGPT PowerShell module
+Install-Module PowerShellAIAssistant -AllowClobber
 
 function Add-To-Path($Path) {
     $Path = [Environment]::GetEnvironmentVariable("PATH", "Machine") + [IO.Path]::PathSeparator + $Path
