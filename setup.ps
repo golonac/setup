@@ -51,6 +51,14 @@ Install-Module -Name Azure -Scope AllUsers -AllowClobber
 Install-Module -Name Terminal-Icons
 # ChatGPT PowerShell module
 Install-Module PowerShellAIAssistant -AllowClobber
+# KeePass secret vault modules
+Install-Module Microsoft.PowerShell.SecretManagement, Microsoft.PowerShell.SecretStore
+Install-Module -Name SecretManagement.KeePass -AllowPrerelease
+Register-SecretVault -Name 'Database' -ModuleName 'SecretManagement.Keepass' -VaultParameters @{
+    Path = "$env:OneDriveConsumer\Database.kdbx"
+    UseMasterPassword = $true
+    KeyPath= "C:\Database.keyx"
+}
 
 function Add-To-Path($Path) {
     $Path = [Environment]::GetEnvironmentVariable("PATH", "Machine") + [IO.Path]::PathSeparator + $Path
