@@ -61,7 +61,7 @@ oh-my-posh font install RobotoMono
 # Patch an oh-my-posh theme with a PowerShell compatibility setting
 $theme = Get-Content "$env:POSH_THEMES_PATH\cobalt2.omp.json" | ConvertFrom-Json
 $theme | Add-Member -Name patch_pwsh_bleed -Value $true -MemberType NoteProperty
-Set-Content -Path ("$env:POSH_THEMES_PATH\theme.json") -Value ($theme | ConvertTo-Json -Depth 99)
+Set-Content -Path ("$env:POSH_THEMES_PATH\theme.json") -Value ($theme | ConvertTo-Json -Depth 99) -Encoding utf8
 # Create a PowerShell (7) and WindowsPowerShell (legacy) profile which enables oh-my-posh on launch
 foreach ($item in "PowerShell", "WindowsPowerShell") {
   $path = Join-Path ([Environment]::GetFolderPath("MyDocuments")) $item
