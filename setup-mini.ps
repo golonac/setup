@@ -1,0 +1,109 @@
+# Open with browser (IE or Edge):
+# https://boxstarter.org/package/nr/url?https://raw.githubusercontent.com/golonac/setup/main/setup-mini.ps
+
+# Windows settings
+Disable-UAC
+try {
+  Set-ExecutionPolicy RemoteSigned -Scope LocalMachine
+}
+catch {}
+Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+# Localization
+Set-WinSystemLocale fi-FI
+Set-WinUserLanguageList fi
+Set-TimeZone "FLE Standard Time"
+Set-Culture fi-FI
+Set-BoxstarterTaskbarOptions -DisableSearchBox
+Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowProtectedOSFiles -EnableShowFileExtensions -EnableShowFullPathInTitleBar -EnableOpenFileExplorerToQuickAccess -EnableShowRecentFilesInQuickAccess -EnableShowFrequentFoldersInQuickAccess -EnableExpandToOpenFolder -EnableShowRibbon -EnableItemCheckBox
+Disable-InternetExplorerESC
+Disable-GameBarTips
+Disable-BingSearch
+# Install registry settings
+reg import (Join-Path $env:ONEDRIVECONSUMER "Setup/WindowsSettings.reg")
+# Disable Telemetry
+Disable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" | Out-Null
+Disable-ScheduledTask -TaskName "Microsoft\Windows\Application Experience\ProgramDataUpdater" | Out-Null
+Disable-ScheduledTask -TaskName "Microsoft\Windows\Autochk\Proxy" | Out-Null
+Disable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" | Out-Null
+Disable-ScheduledTask -TaskName "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" | Out-Null
+Disable-ScheduledTask -TaskName "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" | Out-Null
+Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClient" -ErrorAction SilentlyContinue | Out-Null
+Disable-ScheduledTask -TaskName "Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload" -ErrorAction SilentlyContinue | Out-Null
+# Set the current network as Private
+Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
+# Remove Fax
+Remove-Printer -Name "Fax" -ErrorAction:SilentlyContinue
+Install-Module -Name Terminal-Icons
+# ChatGPT PowerShell module
+Install-Module PowerShellAIAssistant -AllowClobber
+
+function Add-To-Path($Path) {
+    $Path = [Environment]::GetEnvironmentVariable("PATH", "Machine") + [IO.Path]::PathSeparator + $Path
+    [Environment]::SetEnvironmentVariable( "Path", $Path, "Machine" )
+}
+
+# Core
+choco install powershell-core
+choco install nodejs
+choco install git
+choco install gsudo
+choco install python
+choco install nuget.commandline
+choco install poshgit
+choco install oh-my-posh
+choco install grep
+choco install winfetch
+choco install powertoys
+choco install bat
+choco install zoxide
+refreshenv
+oh-my-posh font install RobotoMono
+# Patch an oh-my-posh theme with a PowerShell compatibility setting
+$theme = Get-Content "$env:POSH_THEMES_PATH\cobalt2.omp.json" | ConvertFrom-Json
+$theme | Add-Member -Name patch_pswh_bleed -Value true -MemberType NoteProperty
+Set-Content -Path ("$env:POSH_THEMES_PATH\theme.json") -Value ($theme | ConvertTo-Json -Depth 99)
+# Create a PowerShell (7) and WindowsPowerShell (legacy) profile which enables oh-my-posh on launch
+foreach ($item in "PowerShell", "WindowsPowerShell") {
+  $path = Join-Path ([Environment]::GetFolderPath("MyDocuments")) $item
+  If (!(Test-Path $path)) {
+    New-Item -Path $path -Type Directory -Force
+  }
+  $profilePath = Join-Path $path "Microsoft.PowerShell_profile.ps1"
+  Copy-Item "$env:OneDriveConsumer\Setup\Terminal\Microsoft.PowerShell_profile.ps1" $profilePath
+}
+
+# Tools
+choco install winmerge
+Add-To-Path $env:ProgramFiles/Winmerge
+choco install tidal
+choco install joplin
+choco install wiztree
+choco install czkawka --ignore-checksums
+
+# NPM & tools
+refreshenv
+npm config set fund false
+
+# Config files from OneDrive
+$roamingItems = @{
+  (Join-Path (Get-Item $PROFILE).DirectoryName "FileSystem.ps1xml") = (Join-Path "$env:OneDriveConsumer" "Setup/Terminal/FileSystem.ps1xml")
+  (Join-Path $env:LOCALAPPDATA "Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json") = (Join-Path "$env:OneDriveConsumer" "Setup/Terminal/settings.json")
+}
+foreach ($localItemPath in $roamingItems.Keys) {
+  if (Test-Path $localItemPath) {
+    $existingItem = Get-Item $localItemPath
+    if ($existingItem.LinkType -eq "SymbolicLink") {
+      Write-Host "Local item '$localItemPath' already redirected to '$($existingItem.Target)'"
+    }
+    else {
+      $roamingItemPath = $roamingItems[$localItemPath]
+      New-Item -ItemType SymbolicLink -Path $localItemPath -Target $roamingItemPath -Force
+    }
+  }
+  else {
+    $roamingItemPath = $roamingItems[$localItemPath]
+    New-Item -ItemType SymbolicLink -Path $localItemPath -Target $roamingItemPath
+  }
+}
+
+Enable-UAC
