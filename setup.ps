@@ -67,7 +67,9 @@ function Add-To-Path($Path) {
 
 # Core
 choco install powershell-core
-choco install nodejs
+choco install nvm
+refreshenv
+nvm install latest
 choco install git
 choco install gsudo
 choco install python
@@ -109,6 +111,7 @@ choco install firefox
 choco install chromedriver
 
 # Tools
+choco install nvm
 choco install nssm
 choco install 7zip
 choco install winmerge
