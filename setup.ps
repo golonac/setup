@@ -155,6 +155,7 @@ $roamingItems = @{
   (Join-Path $vscodePath "keyBindings.json") = (Join-Path $vscodeRoamingPath "keyBindings.json")
   (Join-Path $vscodePath "snippets/") = (Join-Path $vscodeRoamingPath "snippets/")
   (Join-Path $env:LOCALAPPDATA "Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json") = (Join-Path "$env:OneDriveConsumer" "Setup/Terminal/settings.json")
+  (Join-Path $env:APPDATA "Microsoft/Windows/Start Menu/Programs/Startup/Autohotkey.ahk") = (Join-Path "$env:OneDriveConsumer" "Setup/Autohotkey.ahk")
 }
 foreach ($localItemPath in $roamingItems.Keys) {
   if (Test-Path $localItemPath) {
