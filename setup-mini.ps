@@ -45,17 +45,29 @@ function Add-To-Path($Path) {
 # Core
 choco install powershell-core
 choco install nodejs
+choco install nvm # Node version manager
+choco install yarn
 choco install git
-choco install gsudo
+choco install gsudo # Run elevated in terminal
 choco install python
 choco install nuget.commandline
-choco install poshgit
-choco install oh-my-posh
-choco install grep
-choco install winfetch
-choco install powertoys
-choco install bat
-choco install zoxide
+choco install poshgit # Git style
+choco install oh-my-posh # Terminal style
+choco install grep # Find in files
+choco install winfetch # Command-line system information utility
+choco install powertoys # Windows PowerToys
+choco install bat # A cat clone with wings
+choco install zoxide # Smart CD command
+choco install altdrag # Alt-drag to move windows
+choco install ffmpeg # Video info and editing CLI
+choco install fzf # Fuzzy finder for bat etc
+choco install less
+choco install nssm # Non-sucking service manager
+choco install openssl # Generate certificates etc
+choco install dotnetfx # .NET Framework
+choco install vcredist140
+choco install vcredist2015
+
 refreshenv
 oh-my-posh font install RobotoMono
 # Patch an oh-my-posh theme with a PowerShell compatibility setting
@@ -73,12 +85,34 @@ foreach ($item in "PowerShell", "WindowsPowerShell") {
 }
 
 # Tools
+choco install keepass
+choco install gh # GitHub CLI
 choco install winmerge
 Add-To-Path $env:ProgramFiles/Winmerge
 choco install tidal
 choco install joplin
 choco install wiztree
 choco install czkawka --ignore-checksums
+choco install brave # Browser
+choco install czawka # Compare files
+choco install docker-cli
+choco install docker-compose
+choco install docker-desktop
+choco install nano # Terminal text editor
+choco install nano-win
+choco install spotify
+choco install tidal
+choco install visualstudio2022community
+choco install vscode
+choco install wiztree # Visualize disk usage
+
+# Dev
+choco install postman # Make HTTP requests
+choco install putty
+choco install fjira # JIRA CLI
+choco install slack
+choco install sql-server-management-studio
+choco install terraform
 
 # NPM & tools
 refreshenv
