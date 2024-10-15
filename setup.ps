@@ -46,8 +46,12 @@ Get-NetConnectionProfile | Set-NetConnectionProfile -NetworkCategory Private
 # Remove Fax
 Remove-Printer -Name "Fax" -ErrorAction:SilentlyContinue
 # Azure PowerShell modules
-Install-Module -Name AzureRM -Scope AllUsers
-Install-Module -Name Azure -Scope AllUsers -AllowClobber
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Install-Module -Name Az.BootStrapper -Force
+Install-AzProfile -Profile 2020-09-01-hybrid -Force
+#Old deprecated way:
+#Install-Module -Name AzureRM -Scope AllUsers
+#Install-Module -Name Azure -Scope AllUsers -AllowClobber
 Install-Module -Name Terminal-Icons
 # ChatGPT PowerShell module
 Install-Module PowerShellAIAssistant -AllowClobber
